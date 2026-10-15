@@ -4,6 +4,8 @@ require "net/http"
 require "uri"
 
 module Ternwire
+  DEFAULT_BASE_URL = "https://ternwire.com"
+
   class APIError < StandardError
     attr_reader :status, :raw_body, :body, :headers
 
@@ -19,10 +21,11 @@ module Ternwire
   end
 
   class Client
-    def initialize(api_key:, base_url:, timeout: 30)
+    def initialize(api_key:, base_url: nil, timeout: 30)
       unless /\Aem_(live|test)_[A-Za-z0-9_-]+\z/.match?(api_key)
         raise ArgumentError, "Use an em_live_ or em_test_ API key"
       end
+      base_url = DEFAULT_BASE_URL if base_url.nil?
       origin = URI.parse(base_url)
       unless %w[http https].include?(origin.scheme) && origin.host && !origin.userinfo &&
           ["", "/"].include?(origin.path) && !origin.query && !origin.fragment

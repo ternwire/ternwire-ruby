@@ -2,7 +2,7 @@ require "ternwire"
 
 client = Ternwire::Client.new(
   api_key: ENV.fetch("TERNWIRE_API_KEY"),
-  base_url: ENV.fetch("TERNWIRE_API_ORIGIN")
+  base_url: ENV["TERNWIRE_API_ORIGIN"]
 )
 accepted = client.submit_email({
   "from" => ENV.fetch("TERNWIRE_FROM"),
